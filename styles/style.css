@@ -1,0 +1,78 @@
+/* ============ INDEX =========== */
+* {
+  font-size: 1rem;
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  font-family: "Open Sans", sans-serif;
+}
+
+html,
+body,
+.canvas,
+.main-container {
+  height: 100%;
+}
+
+.search-container {
+  margin-top: 100px;
+  height: 40px;
+  width: 40%;
+}
+
+#searchLine {
+  flex-grow: 1;
+  border-radius: 6px;
+}
+
+#searchBtn {
+  border-radius: 6px;
+}
+
+.results-container {
+  width: 80%;
+  height: 10%;
+}
+
+#resultsList {
+  list-style: none;
+  width: 50%;
+}
+
+a:link {
+  text-decoration: none;
+  color: black;
+}
+
+li:hover {
+  background-color: lightgray;
+}
+
+/* =========COMPANY=========== */
+
+.main-container {
+  background-color: bisque;
+  max-height: 100%;
+  overflow: auto;
+}
+
+.main-container > *,
+.company-name-and-sector {
+  border: 1px black solid;
+}
+
+.company-header-container{
+  height: 10%;
+}
+
+.stock-price-container{
+  height: 10%;
+  }
+
+.company-description-container{
+  height: 20%;
+}
+
+.stock-chart-container{
+  height: 60%;
+}
