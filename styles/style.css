@@ -51,28 +51,45 @@ li:hover {
 /* =========COMPANY=========== */
 
 .main-container {
-  background-color: bisque;
   max-height: 100%;
   overflow: auto;
 }
 
-.main-container > *,
-.company-name-and-sector {
-  border: 1px black solid;
-}
-
-.company-header-container{
+.company-header-container {
   height: 10%;
 }
 
-.stock-price-container{
+.stock-price-container {
   height: 10%;
-  }
+}
 
-.company-description-container{
+#company-link * {
+  align-self: center;
+  font-size: 1.6rem;
+}
+
+.stock-price-container,
+.stock-price-container * {
+  font-size: 1.3rem;
+}
+
+.company-description-container {
   height: 20%;
 }
 
-.stock-chart-container{
+.stock-chart-container {
   height: 60%;
+}
+
+.green-text {
+  color: rgb(6, 179, 6);
+}
+
+.red-text {
+  color: red;
+}
+
+#myChart {
+  max-height: 100%;
+  max-width: 100%;
 }
