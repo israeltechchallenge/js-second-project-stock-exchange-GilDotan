@@ -26,9 +26,9 @@ function disableSpinner() {
   loadingSpinner.classList.add("d-none");
 }
 
-// let profile;
-// let history;
-
+let history;
+let profile;
+let image;
 async function getCompanyProfile() {
   enableSpinner();
   try {
@@ -37,7 +37,9 @@ async function getCompanyProfile() {
     );
     const data = await response.json();
     profile = data;
-    pagePopulate(data);
+    image = data.profile.image;
+    await pagePopulate(data);
+    disableSpinner();
   } catch (err) {
     console.error(err);
   }
@@ -45,7 +47,7 @@ async function getCompanyProfile() {
 
 getCompanyProfile();
 
-function pagePopulate(data) {
+async function pagePopulate(data) {
   companyImage.setAttribute("src", data.profile.image);
   nameOfCompany.innerText = data.profile.companyName;
   companySector.innerText = data.profile.sector;
@@ -87,7 +89,6 @@ async function getHistory() {
     prices.reverse();
     myChart.data.datasets[0].data = prices;
     myChart.update();
-    disableSpinner();
   } catch (err) {
     console.error(err);
   }

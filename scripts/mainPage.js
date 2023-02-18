@@ -1,6 +1,7 @@
 const input = document.getElementById("searchLine");
 const searchBtn = document.getElementById("searchBtn");
 const loadingSpinner = document.getElementById("loadingSpinner");
+let baseUrl = `https://stock-exchange-dot-full-stack-course-services.ew.r.appspot.com/api/v3/`;
 
 searchBtn.addEventListener("click", function (event) {
   event.preventDefault();
@@ -28,23 +29,43 @@ async function getDataFromAPI() {
   enableSpinner();
   try {
     const response = await fetch(
-      `https://stock-exchange-dot-full-stack-course-services.ew.r.appspot.com/api/v3/search?query=${input.value}&limit=10&exchange=NASDAQ`
+      new URL(`search?query=${input.value}&limit=10&exchange=NASDAQ`, baseUrl)
     );
     const data = await response.json();
+
     displayList(data);
-    console.log({ data });
   } catch (err) {
     console.error(err);
   }
-  disableSpinner();
 }
 
-function displayList(response) {
+async function getCompanyProfile(symbol) {
+  try {
+    const response = await fetch(new URL(`company/profile/${symbol}`, baseUrl));
+    const data = await response.json();
+    const profile = data.profile;
+    if (profile && profile.image && profile.changesPercentage) {
+      return {
+        image: profile.image,
+        changesPercentage: profile.changesPercentage,
+      };
+    } else {
+      return null;
+    }
+  } catch (err) {
+    console.error(err);
+    return null;
+  }
+}
+
+async function displayList(response) {
   let list = document.getElementById("resultsList");
+  let fragment = document.createDocumentFragment(); // create a DocumentFragment
+
   if (response.length === 0) {
     let listItem = document.createElement("li");
     listItem.innerHTML = "No results found";
-    list.appendChild(listItem);
+    fragment.appendChild(listItem); // add the item to the DocumentFragment
   } else {
     for (const item of response) {
       const { name, symbol } = item;
@@ -52,15 +73,43 @@ function displayList(response) {
       let link = document.createElement("a");
       link.setAttribute("href", `/company.html?symbol=${symbol}`);
       listItem.classList.add("list-group-item");
-      link.innerHTML = `${name} (${symbol})`;
+
+      // get the company profile
+      let companyprofile = await getCompanyProfile(symbol);
+
+      // create the image element and set its attributes
+      let imageElement = document.createElement("img");
+      if (companyprofile && companyprofile.image) {
+        imageElement.src = companyprofile.image;
+        imageElement.alt = `${name} logo`;
+      }
+
+      link.appendChild(imageElement);
+
+      // add the link text
+      let linkText = `${name} (${symbol})`;
+      link.appendChild(document.createTextNode(linkText));
+
+      if (companyprofile && companyprofile.changesPercentage) {
+        const changesPercentage = Number(
+          companyprofile.changesPercentage
+        ).toFixed(2);
+        const changesPercentageClass =
+          companyprofile.changesPercentage > 0 ? "positive" : "negative";
+        const changesPercentageSpan = document.createElement("span");
+        changesPercentageSpan.innerText = ` (${changesPercentage}%)`;
+        changesPercentageSpan.classList.add(changesPercentageClass);
+        link.appendChild(changesPercentageSpan);
+      }
+
       listItem.style.cursor = "pointer";
       listItem.appendChild(link);
-      list.appendChild(listItem);
-      listItem.addEventListener("click", function () {
-        window.location.href = link.getAttribute("href");
-      });
+      fragment.appendChild(listItem); // add the item to the DocumentFragment
     }
   }
+
+  list.innerHTML = ""; // clear the list
+  list.appendChild(fragment); // append the DocumentFragment to the list
+
+  disableSpinner();
 }
-
-
