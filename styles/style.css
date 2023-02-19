@@ -13,8 +13,32 @@ body,
   height: 100%;
 }
 
+.marquee {
+  height: 5%;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.marquee > * {
+  font-size: 1.5rem;
+  animation: animate 2000s linear infinite;
+  display: inline-block;
+}
+
+span {
+  font-size: 1.5rem;
+}
+
+@keyframes animate {
+  100% {
+    transform: translate(-100%, 0);
+  }
+}
+
+.header {
+  font-size: 4rem;
+}
+
 .search-container {
-  margin-top: 100px;
   height: 40px;
   width: 40%;
 }
@@ -52,7 +76,6 @@ li:hover {
   max-width: 120px;
   padding-right: 20px;
   font-size: x-small;
-
 }
 
 .positive {
@@ -63,3 +86,8 @@ li:hover {
   color: red;
 }
 
+a,
+a > * {
+  font-size: 1.3rem;
+  font-weight: 600;
+}

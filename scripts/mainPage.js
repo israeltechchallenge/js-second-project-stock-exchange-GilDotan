@@ -1,3 +1,4 @@
+const marqueeInnerText = document.getElementById("marquee-text");
 const input = document.getElementById("searchLine");
 const searchBtn = document.getElementById("searchBtn");
 const loadingSpinner = document.getElementById("loadingSpinner");
@@ -7,6 +8,38 @@ searchBtn.addEventListener("click", function (event) {
   event.preventDefault();
   getDataFromAPI();
 });
+
+// Make a request to the API endpoint for marquee data
+fetch(new URL(`stock-screener?&exchange=NASDAQ`, baseUrl))
+  .then((response) => {
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+    return response.json();
+  })
+  .then((data) => {
+    // Check if the data property exists and is not an empty array
+    if (!data || !Array.isArray(data) || data.length === 0) {
+      throw new Error("No data available");
+    }
+
+    // Extract the company symbols and prices
+    const symbols = data.map((item) => item.symbol);
+    const prices = data.map((item) => item.price);
+
+    // Convert the data to a format suitable for a marquee
+    const marqueeText = symbols
+      .map((symbol, index) => {
+        // Set the price to be green
+        const price = `<span style="color: green;">${prices[index]}</span>`;
+        return `${symbol}: ${price}`;
+      })
+      .join("  |  ");
+
+    // Display the marquee on the webpage
+    marqueeInnerText.innerHTML = marqueeText;
+  })
+  .catch((error) => console.error(error));
 
 function enableSpinner() {
   loadingSpinner.classList.remove("d-none");
@@ -74,7 +107,6 @@ async function displayList(response) {
       link.setAttribute("href", `/company.html?symbol=${symbol}`);
       listItem.classList.add("list-group-item");
 
-      // get the company profile
       let companyprofile = await getCompanyProfile(symbol);
 
       // create the image element and set its attributes
@@ -104,12 +136,11 @@ async function displayList(response) {
 
       listItem.style.cursor = "pointer";
       listItem.appendChild(link);
-      fragment.appendChild(listItem); // add the item to the DocumentFragment
+      fragment.appendChild(listItem);
     }
   }
 
-  list.innerHTML = ""; // clear the list
-  list.appendChild(fragment); // append the DocumentFragment to the list
-
+  list.innerHTML = "";
+  list.appendChild(fragment);
   disableSpinner();
 }

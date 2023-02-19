@@ -12,9 +12,14 @@
       crossorigin="anonymous"
     />
     <title>JS Project2 Stock Exchange</title>
+    <link rel="icon" type="image/x-icon" href="./images/favicon.ico" />
   </head>
   <body>
     <div class="canvas d-flex flex-column">
+      <div class="marquee">
+        <div id="marquee-text"></div>
+      </div>
+      <div class="header align-self-center pt-5">Search Nasdaq Stocks</div>
       <div class="search-container d-flex align-self-center">
         <input type="search" id="searchLine" name="q" />
         <button id="searchBtn">Search</button>
