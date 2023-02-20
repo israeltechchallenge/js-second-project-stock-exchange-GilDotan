@@ -1,45 +1,40 @@
-const marqueeInnerText = document.getElementById("marquee-text");
+// const marqueeInnerText = document.getElementById("marquee-text");
 const input = document.getElementById("searchLine");
 const searchBtn = document.getElementById("searchBtn");
 const loadingSpinner = document.getElementById("loadingSpinner");
-let baseUrl = `https://stock-exchange-dot-full-stack-course-services.ew.r.appspot.com/api/v3/`;
-
-searchBtn.addEventListener("click", function (event) {
-  event.preventDefault();
-  getDataFromAPI();
-});
+const baseUrl = `https://stock-exchange-dot-full-stack-course-services.ew.r.appspot.com/api/v3/`;
 
 // Make a request to the API endpoint for marquee data
-fetch(new URL(`stock-screener?&exchange=NASDAQ`, baseUrl))
-  .then((response) => {
-    if (!response.ok) {
-      throw new Error("Network response was not ok");
-    }
-    return response.json();
-  })
-  .then((data) => {
-    // Check if the data property exists and is not an empty array
-    if (!data || !Array.isArray(data) || data.length === 0) {
-      throw new Error("No data available");
-    }
+// fetch(new URL(`stock-screener?&exchange=NASDAQ`, baseUrl))
+//   .then((response) => {
+//     if (!response.ok) {
+//       throw new Error("Network response was not ok");
+//     }
+//     return response.json();
+//   })
+//   .then((data) => {
+//     // Check if the data property exists and is not an empty array
+//     if (!data || !Array.isArray(data) || data.length === 0) {
+//       throw new Error("No data available");
+//     }
 
-    // Extract the company symbols and prices
-    const symbols = data.map((item) => item.symbol);
-    const prices = data.map((item) => item.price);
+//     // Extract the company symbols and prices
+//     const symbols = data.map((item) => item.symbol);
+//     const prices = data.map((item) => item.price);
 
-    // Convert the data to a format suitable for a marquee
-    const marqueeText = symbols
-      .map((symbol, index) => {
-        // Set the price to be green
-        const price = `<span style="color: green;">${prices[index]}</span>`;
-        return `${symbol}: ${price}`;
-      })
-      .join("  |  ");
+//     // Convert the data to a format suitable for a marquee
+//     const marqueeText = symbols
+//       .map((symbol, index) => {
+//         // Set the price to be green
+//         const price = `<span style="color: green;">${prices[index]}</span>`;
+//         return `${symbol}: ${price}`;
+//       })
+//       .join("  |  ");
 
-    // Display the marquee on the webpage
-    marqueeInnerText.innerHTML = marqueeText;
-  })
-  .catch((error) => console.error(error));
+//     // Display the marquee on the webpage
+//     marqueeInnerText.innerHTML = marqueeText;
+//   })
+//   .catch((error) => console.error(error));
 
 function enableSpinner() {
   loadingSpinner.classList.remove("d-none");
@@ -47,14 +42,6 @@ function enableSpinner() {
 function disableSpinner() {
   loadingSpinner.classList.add("d-none");
 }
-
-document
-  .getElementById("searchLine")
-  .addEventListener("keypress", function (e) {
-    if (e.key === "Enter") {
-      getDataFromAPI();
-    }
-  });
 
 async function getDataFromAPI() {
   let list = document.getElementById("resultsList");
@@ -72,7 +59,20 @@ async function getDataFromAPI() {
   }
 }
 
-async function getCompanyProfile(symbol) {
+document
+  .getElementById("searchLine")
+  .addEventListener("keypress", function (e) {
+    if (e.key === "Enter") {
+      getDataFromAPI();
+    }
+  });
+
+searchBtn.addEventListener("click", function (event) {
+  event.preventDefault();
+  getDataFromAPI();
+});
+
+async function getCompanyData(symbol) {
   try {
     const response = await fetch(new URL(`company/profile/${symbol}`, baseUrl));
     const data = await response.json();
@@ -107,12 +107,12 @@ async function displayList(response) {
       link.setAttribute("href", `/company.html?symbol=${symbol}`);
       listItem.classList.add("list-group-item");
 
-      let companyprofile = await getCompanyProfile(symbol);
+      let companyProfile = await getCompanyData(symbol);
 
       // create the image element and set its attributes
       let imageElement = document.createElement("img");
-      if (companyprofile && companyprofile.image) {
-        imageElement.src = companyprofile.image;
+      if (companyProfile && companyProfile.image) {
+        imageElement.src = companyProfile.image;
         imageElement.alt = `${name} logo`;
       }
 
@@ -122,12 +122,12 @@ async function displayList(response) {
       let linkText = `${name} (${symbol})`;
       link.appendChild(document.createTextNode(linkText));
 
-      if (companyprofile && companyprofile.changesPercentage) {
+      if (companyProfile && companyProfile.changesPercentage) {
         const changesPercentage = Number(
-          companyprofile.changesPercentage
+          companyProfile.changesPercentage
         ).toFixed(2);
         const changesPercentageClass =
-          companyprofile.changesPercentage > 0 ? "positive" : "negative";
+          companyProfile.changesPercentage > 0 ? "positive" : "negative";
         const changesPercentageSpan = document.createElement("span");
         changesPercentageSpan.innerText = ` (${changesPercentage}%)`;
         changesPercentageSpan.classList.add(changesPercentageClass);
