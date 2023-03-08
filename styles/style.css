@@ -7,18 +7,16 @@
 }
 
 html,
-body,
-.canvas,
-.main-container {
+body {
   height: 100%;
 }
 
 .marquee {
-  height: 5%;
+  height: 2rem;
   white-space: nowrap;
   overflow: hidden;
 }
-.marquee > * {
+.marquee {
   font-size: 1.5rem;
   animation: animate 2000s linear infinite;
   display: inline-block;
@@ -34,48 +32,20 @@ span {
   }
 }
 
-.header {
-  font-size: 4rem;
-}
-
-.search-container {
-  height: 40px;
-  width: 40%;
-}
-
-#searchLine {
-  flex-grow: 1;
-  border-radius: 6px;
-}
-
-#searchBtn {
-  border-radius: 6px;
-}
-
-.results-container {
-  width: 80%;
-  height: 10%;
-}
-
-#resultsList {
-  list-style: none;
-  width: 50%;
-}
-
 a:link {
   text-decoration: none;
   color: black;
 }
 
 li:hover {
-  background-color: lightgray;
+  background-color: rgb(233, 236, 237);
 }
 
-.results-container img {
+img {
   max-height: 70px;
   max-width: 70px;
   padding-right: 20px;
-  font-size: x-small;
+  font-size: 0.5rem;
 }
 
 .positive {
@@ -86,8 +56,11 @@ li:hover {
   color: red;
 }
 
-a,
-a > * {
+a {
   font-size: 1.3rem;
   font-weight: 600;
+}
+
+.spinner-border {
+  margin-left: 50%;
 }

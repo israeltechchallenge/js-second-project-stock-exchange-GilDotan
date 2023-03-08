@@ -1,3 +1,5 @@
+const baseUrl = `https://stock-exchange-dot-full-stack-course-services.ew.r.appspot.com/api/v3/`;
+
 class StockData {
   constructor(symbol, price) {
     this.symbol = symbol;
@@ -29,7 +31,7 @@ async function getStockData() {
   }
 }
 
-const marqueeInnerText = document.getElementById("marquee-text");
+const marquee = document.querySelector(".marquee");
 
 getStockData().then((stockItems) => {
   if (stockItems) {
@@ -40,6 +42,6 @@ getStockData().then((stockItems) => {
       })
       .join("  |  ");
 
-    marqueeInnerText.innerHTML = marqueeText;
+    marquee.innerHTML = marqueeText;
   }
 });
