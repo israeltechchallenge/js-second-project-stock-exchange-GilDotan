@@ -1,0 +1,50 @@
+.main-container {
+  max-height: 100%;
+  overflow: auto;
+}
+
+.company-header-container {
+  max-height: 10vh;
+}
+
+#company-image {
+  display: block;
+  width: auto;
+  height: auto;
+}
+
+.stock-price-container {
+  max-height: 10vh;
+}
+
+#company-link * {
+  align-self: center;
+  font-size: 1.6rem;
+}
+
+.stock-price-container,
+.stock-price-container * {
+  font-size: 1.3rem;
+}
+
+.company-description-container {
+  max-height: 20vh;
+}
+
+.stock-chart-container {
+  margin-top: 10vh;
+  max-height: 50vh;
+}
+
+.green-text {
+  color: rgb(6, 179, 6);
+}
+
+.red-text {
+  color: red;
+}
+
+#myChart {
+  max-height: 100%;
+  max-width: 100%;
+}
