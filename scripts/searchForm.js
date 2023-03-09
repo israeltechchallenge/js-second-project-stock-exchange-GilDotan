@@ -1,9 +1,10 @@
+let userInput = "";
+
 class SearchForm {
   constructor(container) {
     this.container = container;
     this.input = null;
     this.searchBtn = null;
-    // this.loadingSpinner = null;
     this.baseUrl =
       "https://stock-exchange-dot-full-stack-course-services.ew.r.appspot.com/api/v3/";
     this.searchHandler = null;
@@ -34,15 +35,17 @@ class SearchForm {
 
     form.appendChild(inputGroup);
 
-    this.loadingSpinner = document.createElement("span");
-
     this.container.appendChild(form);
   }
 
   async handleSearch() {
     const query = this.input.value.trim();
+    console.log(userInput);
+    console.log(query);
+    userInput = query;
+    console.log(userInput);
+
     if (query.length === 0) return;
-    this.toggleSpinner();
     try {
       const response = await fetch(
         `${this.baseUrl}search?query=${query}&limit=10&exchange=NASDAQ`
@@ -54,12 +57,7 @@ class SearchForm {
     } catch (err) {
       console.error(err);
     } finally {
-      this.toggleSpinner();
     }
-  }
-
-  toggleSpinner() {
-    this.loadingSpinner.classList.toggle("d-none");
   }
 
   onSearch(handler) {

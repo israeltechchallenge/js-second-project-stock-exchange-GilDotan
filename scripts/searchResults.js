@@ -36,7 +36,7 @@ class SearchResult {
     list.classList.add("list-group");
 
     this.loadingSpinner = document.createElement("div");
-    this.loadingSpinner.classList.add("spinner-border", "text-primary",);
+    this.loadingSpinner.classList.add("spinner-border", "text-primary");
     document.querySelector(".container").appendChild(this.loadingSpinner);
 
     if (response.length === 0) {
@@ -77,15 +77,34 @@ class SearchResult {
 
         let link = document.createElement("a");
         link.setAttribute("href", `/company.html?symbol=${symbol}`);
-        link.innerText = `${name} (${symbol})`;
+        const highlighted = renderHighlight(name, symbol);
+        console.log(highlighted);
+        link.append(highlighted);
         link.appendChild(changesPercentageSpan);
         link.prepend(imageElement);
 
         listItem.appendChild(link);
         list.appendChild(listItem);
+
+        function renderHighlight(name, symbol) {
+          const highlightedText = document.createElement("span");
+          const nameAndSymbol = name + " " + symbol;
+          const reg = new RegExp(userInput, "gi");
+          if (nameAndSymbol.match(reg)) {
+            highlightedText.innerHTML = `${nameAndSymbol.replace(
+              reg,
+              '<span class="highlight">$&</span>'
+            )}`;
+          } else {
+            highlightedText.textContent = `${name} (${symbol})`;
+          }
+          return highlightedText;
+        }
       }
     }
     this.toggleSpinner();
     this.resultsElement.appendChild(list);
   }
+
+
 }
